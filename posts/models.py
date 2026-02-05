@@ -1,5 +1,6 @@
 
 from django.db import models
+from django.contrib.auth.models import User as UserModel
 
 
 class User(models.Model):
@@ -16,7 +17,7 @@ class User(models.Model):
 
 class Post(models.Model):
     content = models.TextField()  # The text content of the post
-    author = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE) # The user who created the post
+    author = models.ForeignKey(UserModel, related_name='posts', on_delete=models.CASCADE) # The user who created the post
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp when the post was created
 
 
