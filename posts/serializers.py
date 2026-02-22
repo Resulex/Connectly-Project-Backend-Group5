@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from .models import Like, User, Post, Comment
+from .models import Like, Post, Comment
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from allauth.socialaccount.models import SocialAccount
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,3 +56,38 @@ class LikeSerializer(serializers.ModelSerializer):
         if not User.objects.filter(id=value.id).exists():
             raise serializers.ValidationError("Author not found.")
         return value
+    
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=100)
+    password = serializers.CharField(max_length=128, write_only=True)
+
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get('password')
+
+        if not username or not password:
+            raise serializers.ValidationError("Username and password are required.")
+
+        user = authenticate(username=username, password=password)
+        if not user:
+            raise serializers.ValidationError("Invalid username or password.")
+
+        data['user'] = user
+        return data
+    
+
+class GoogleLoginSerializer(serializers.Serializer):
+    access_token = serializers.CharField(required=False, allow_blank=True)
+    code = serializers.CharField(required=False, allow_blank=True)
+    id_token = serializers.CharField(required=False, allow_blank=True)
+
+    def validate(self, attrs):
+        access_token = attrs.get('access_token')
+        code = attrs.get('code')
+        id_token = attrs.get('id_token')
+
+        if not access_token and not code and not id_token:
+            raise serializers.ValidationError('Provide access_token, code, or id_token.')
+
+        return attrs    

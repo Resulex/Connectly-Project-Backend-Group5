@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CommentPostView, CreatePostView, LikePostView, PostDetailView, ProtectedView, UserListCreate, PostListCreate, CommentListCreate
+from .views import CommentPostView, CreatePostView, GoogleLoginView, LikePostView, LoginView, PostDetailView, ProtectedView, UserListCreate, PostListCreate, CommentListCreate
 
 
 urlpatterns = [
@@ -15,6 +15,8 @@ urlpatterns = [
     path('factory-test/', CreatePostView.as_view(), name='factory-test'), # factory test API
     path('posts/<int:post_id>/like/', LikePostView.as_view(), name='like-post'), # like/unlike post API
     path('posts/<int:post_id>/comments/', CommentPostView.as_view(), name='comment-post'), # comment post API
+    path('login/', LoginView.as_view(), name='login'), # login API
+    path('auth/google/login/', GoogleLoginView.as_view(), name='google-login'), # Google OAuth2 login API
 ]
 
 
