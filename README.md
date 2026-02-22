@@ -25,8 +25,10 @@
 | **Postman Results - (JSON)** | https://drive.google.com/file/d/1qUHLtdaYtKMFKTh4KbMUc66i650G8jJh/view?usp=sharing |
 |  |  |
 | **Homework 6:** | **Integrating Third-Party Services** |
-| **Placeholder** |  |
-| **Placeholder** |  |
+| **Connectly Authentication and Authorization Flow v2** | https://drive.google.com/file/d/1jlFtliYIuDZXy0NOYSTryrlSqVNtNnHO/view?usp=sharing |
+| **Postman Results - (Screenshot)** | https://drive.google.com/drive/folders/17oQ5E6nncqZLqBDFo7k8MwhPcBDlqrPH?usp=sharing |
+| **Postman Results - (JSON)** | https://drive.google.com/file/d/1dDKyofix5ZrfD4ZzHROLgPyzFIbIkTr1/view?usp=sharing |
+| **Postman Environment - (JSON)** | https://drive.google.com/file/d/1S8_e_w_wSkjyjIpFbKJu0fY_tivyBDj0/view?usp=sharing |
 |  |  |
 | **Homework 7:** | **Building a News Feed** |
 | **Placeholder** |  |
