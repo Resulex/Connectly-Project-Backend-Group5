@@ -31,8 +31,8 @@
 | **Postman Environment - (JSON)** | https://drive.google.com/file/d/1S8_e_w_wSkjyjIpFbKJu0fY_tivyBDj0/view?usp=sharing |
 |  |  |
 | **Homework 7:** | **Building a News Feed** |
-| **Placeholder** |  |
-| **Placeholder** |  |
+| **Connectly CRUD Interaction Flow Diagram v5** | https://drive.google.com/file/d/1Syw7yE1nv5P_-_daudDqCfoB4-sdshWB/view?usp=sharing |
+| **Connectly System Architecture Diagram v5** | https://drive.google.com/file/d/1476bffJk8rwn7frLbqEVvvZZa_FDyTkf/view?usp=sharing |
 | **Postman Results - (Screenshot)** | https://drive.google.com/drive/folders/1PABaLAF1RL31i-spejt5GG5fTHUfpGDb?usp=sharing |
 | **Postman Results - (JSON)** | https://drive.google.com/file/d/1mGLYZRUky9KIxONK7jTdf_aGhbwCjUT6/view?usp=sharing |
 | **Postman Environment - (JSON)** | https://drive.google.com/file/d/1wL6OWEfRGHskKjtEOT9pI2YHTMOLrWsb/view?usp=sharing |
