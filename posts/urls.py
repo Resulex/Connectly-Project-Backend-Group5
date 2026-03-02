@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import CommentPostView, CreatePostView, GoogleLoginView, LikePostView, LoginView, PostDetailView, ProtectedView, UserListCreate, PostListCreate, CommentListCreate
+from .views import (CommentPostView, CreatePostView, FeedView, GoogleLoginView, 
+    LikePostView, LoginView, PostDetailView, ProtectedView, UserListCreate, PostListCreate, 
+    CommentListCreate, FeedView )
 
 
 urlpatterns = [
@@ -17,6 +19,7 @@ urlpatterns = [
     path('posts/<int:post_id>/comments/', CommentPostView.as_view(), name='comment-post'), # comment post API
     path('login/', LoginView.as_view(), name='login'), # login API
     path('auth/google/login/', GoogleLoginView.as_view(), name='google-login'), # Google OAuth2 login API
+    path('feed/', FeedView.as_view(), name='feed'), # user feed API
 ]
 
 

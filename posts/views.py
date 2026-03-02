@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from posts.pagination import Pagination
 from .models import Like, Post, Comment
-from .serializers import UserSerializer, PostSerializer, CommentSerializer, LikeSerializer, LoginSerializer
+from .serializers import UserSerializer, PostSerializer, CommentSerializer, LikeSerializer, LoginSerializer, FeedPostSerializer
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsPostAuthor
@@ -15,6 +15,8 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from google.auth.transport import requests
 from google.oauth2 import id_token
 import logging
+from django.core.cache import cache
+from django.db.models import Count, Prefetch
 
 
 logger = LoggerSingleton().get_logger()
@@ -55,6 +57,7 @@ class PostListCreate(APIView):
 class CommentListCreate(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         comments = Comment.objects.all()
         serializer = CommentSerializer(comments, many=True)
@@ -65,6 +68,8 @@ class CommentListCreate(APIView):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            feed_version = cache.get('feed_version', 1)
+            cache.set('feed_version', feed_version + 1)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -101,8 +106,14 @@ class CreatePostView(APIView):
                 title=data['title'],
                 content=data.get('content', ''),
                 metadata=data.get('metadata', {}),
-                author=request.user # Assuming the user is authenticated and available in the request
+                author=request.user 
             )
+
+            # Invalidate feed cache by bumping version
+            feed_version = cache.get('feed_version', 1)
+            cache.set('feed_version', feed_version + 1)
+
+
             return Response({'message': 'Post created successfully!', 'post_id': post.id}, status=status.HTTP_201_CREATED)
         except ValueError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -117,6 +128,11 @@ class LikePostView(APIView):
         try:
             post = Post.objects.get(id=post_id)
             like, created = Like.objects.get_or_create(author=request.user, post=post)
+            
+             # Invalidate feed cache by bumping version
+            feed_version = cache.get('feed_version', 1)
+            cache.set('feed_version', feed_version + 1)
+            
             if created:
                 return Response({'message': 'Post liked successfully!'}, status=status.HTTP_201_CREATED)
             else:
@@ -229,3 +245,50 @@ class GoogleLoginView(APIView):
                 {'error': 'Authentication failed'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        
+class FeedView(APIView):
+    """
+    GET /feed/?page=<n>&page_size=<m>
+    Returns latest posts ordered by created_at with:
+      - like_count (annotated)
+      - latest comments (3 most recent comments per post)
+     Uses a feed version cache key to allow easy invalidation.
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        page_size = request.query_params.get('page_size')
+        page = request.query_params.get('page', '1')
+
+        # include feed version so invalidation is simple
+        feed_version = cache.get('feed_version', 1)
+        cache_key = f"feed:v{feed_version}:user:{request.user.id}:page:{page}:size:{page_size or 'default'}"
+        cached = cache.get(cache_key)
+        if cached:
+            return Response(cached)
+
+        posts_qs = (
+            Post.objects
+                .select_related('author')
+                .prefetch_related(
+                    Prefetch(
+                        'comments',
+                        queryset=Comment.objects.select_related('author').order_by('-created_at')
+                    )
+                )
+                .annotate(like_count=Count('likes'))
+                .order_by('-created_at')
+        )
+
+        paginator = Pagination()
+        paginated_qs = paginator.paginate_queryset(posts_qs, request)
+
+        result = []
+        for post in paginated_qs:
+            serialized = FeedPostSerializer(post, context={"request": request}).data
+            result.append(serialized)
+
+        response = paginator.get_paginated_response(result)
+        cache.set(cache_key, response.data, 60)  # short TTL; tune as needed
+        return response

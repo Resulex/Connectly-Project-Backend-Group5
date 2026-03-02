@@ -91,3 +91,33 @@ class GoogleLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Provide access_token, code, or id_token.')
 
         return attrs    
+
+ 
+class FeedCommentSerializer(serializers.ModelSerializer):
+    author = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ("id", "text", "author", "created_at")
+
+    def get_author(self, obj):
+        # return compact author info
+        return {"id": obj.author.id, "username": obj.author.username}
+
+
+class FeedPostSerializer(serializers.ModelSerializer):
+    author = serializers.SerializerMethodField()
+    like_count = serializers.IntegerField(read_only=True)
+    latest_comments = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Post
+        fields = ("id", "title", "content", "post_type", "metadata", "author", "created_at", "like_count", "latest_comments")
+
+    def get_author(self, obj):
+        return {"id": obj.author.id, "username": obj.author.username}
+
+    def get_latest_comments(self, obj):
+       # comments should be prefetched, but enforce ordering here as well
+        qs = obj.comments.order_by('-created_at')[:3]
+        return FeedCommentSerializer(qs, many=True).data
