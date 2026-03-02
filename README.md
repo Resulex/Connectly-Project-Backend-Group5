@@ -33,3 +33,6 @@
 | **Homework 7:** | **Building a News Feed** |
 | **Placeholder** |  |
 | **Placeholder** |  |
+| **Postman Results - (Screenshot)** | https://drive.google.com/drive/folders/1PABaLAF1RL31i-spejt5GG5fTHUfpGDb?usp=sharing |
+| **Postman Results - (JSON)** | https://drive.google.com/file/d/1mGLYZRUky9KIxONK7jTdf_aGhbwCjUT6/view?usp=sharing |
+| **Postman Environment - (JSON)** | https://drive.google.com/file/d/1wL6OWEfRGHskKjtEOT9pI2YHTMOLrWsb/view?usp=sharing |
