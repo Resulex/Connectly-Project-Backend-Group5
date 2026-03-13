@@ -1,23 +1,29 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.pagination import PageNumberPagination
+
+from django.contrib.auth import get_user_model
+from django.db.models import Count, Prefetch, Q
+from django.core.cache import cache
+
+from rest_framework.authtoken.models import Token
+from google.auth.transport import requests
+from google.oauth2 import id_token
+
 from posts.pagination import Pagination
 from .models import Like, Post, Comment
 from .serializers import (
     UserSerializer, PostSerializer, CommentSerializer,
     LikeSerializer, LoginSerializer, FeedPostSerializer
 )
-from django.contrib.auth import get_user_model
-from rest_framework.permissions import IsAuthenticated
 from .permissions import IsPostAuthor, IsAdminRole
-from rest_framework.authentication import TokenAuthentication
+
 from singletons.logger_singleton import LoggerSingleton
 from factories.post_factory import PostFactory
-from rest_framework.authtoken.models import Token
-from google.auth.transport import requests
-from google.oauth2 import id_token
-from django.core.cache import cache
-from django.db.models import Count, Prefetch, Q
+
 
 # Get the Django user model
 User = get_user_model()
@@ -211,6 +217,8 @@ class CommentPostView(APIView):
             serializer = CommentSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save(author=request.user, post=post)
+                feed_version = cache.get('feed_version', 1)
+                cache.set('feed_version', feed_version + 1)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Post.DoesNotExist:
@@ -348,3 +356,5 @@ class ProtectedView(APIView):
 
     def get(self, request):
         return Response({"message": "Authenticated!"})
+    
+
