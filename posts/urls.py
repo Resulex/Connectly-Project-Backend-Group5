@@ -1,26 +1,23 @@
 from django.urls import path
-from .views import (CommentPostView, CreatePostView, FeedView, GoogleLoginView, 
-    LikePostView, LoginView, PostDetailView, ProtectedView, UserListCreate, PostListCreate, 
-    CommentListCreate, FeedView )
-
+from .views import (
+    PostListCreate, PostDetailView, CommentPostView,
+    CreatePostView, LikePostView, FeedView, DeletePostView,
+    LoginView, GoogleLoginView
+)
 
 urlpatterns = [
-    # path('users/', views.get_users, name='get_users'),
-    # path('users/create/', views.create_user, name='create_user'),
-    # path('posts/', views.get_posts, name='get_posts'),
-    # path('posts/create/', views.create_post, name='create_post'),
-    path('users/', UserListCreate.as_view(), name='user-list-create'), # users API
-    path('posts/', PostListCreate.as_view(), name='post-list-create'), # posts API
-    path('comments/', CommentListCreate.as_view(), name='comment-list-create'), #comments API
-    path('posts/<int:pk>/', PostDetailView.as_view(), name='post-detail'), # post detail API
-    path('protected/', ProtectedView.as_view(), name='protected'), # protected API
-    path('factory-test/', CreatePostView.as_view(), name='factory-test'), # factory test API
-    path('posts/<int:post_id>/like/', LikePostView.as_view(), name='like-post'), # like/unlike post API
-    path('posts/<int:post_id>/comments/', CommentPostView.as_view(), name='comment-post'), # comment post API
-    path('login/', LoginView.as_view(), name='login'), # login API
-    path('auth/google/login/', GoogleLoginView.as_view(), name='google-login'), # Google OAuth2 login API
-    path('feed/', FeedView.as_view(), name='feed'), # user feed API
+    # Posts
+    path('posts/', PostListCreate.as_view(), name='post-list-create'),
+    path('posts/create/', CreatePostView.as_view(), name='create-post'),
+    path('posts/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
+    path('posts/<int:post_id>/like/', LikePostView.as_view(), name='like-post'),
+    path('posts/<int:post_id>/comment/', CommentPostView.as_view(), name='comment-post'),
+    path('posts/<int:pk>/delete/', DeletePostView.as_view(), name='delete-post'),
+
+    # Feed
+    path('feed/', FeedView.as_view(), name='feed'),
+
+    # Auth
+    path('login/', LoginView.as_view(), name='login'),
+    path('google-login/', GoogleLoginView.as_view(), name='google-login'),
 ]
-
-
-
