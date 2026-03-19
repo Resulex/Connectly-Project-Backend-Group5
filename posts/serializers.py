@@ -13,13 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    likes_count = serializers.IntegerField(source='likes.count', read_only=True)
-    comments_count = serializers.IntegerField(source='comments.count', read_only=True)
-
     class Meta:
         model = Post
-        fields = ['id', 'content', 'author', 'created_at', 'likes_count', 'comments_count']
-
+        fields = ['id', 'author', 'post_type', 'title', 'content', 'metadata', 'privacy', 'created_at']
+        read_only_fields = ['author', 'created_at']
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
