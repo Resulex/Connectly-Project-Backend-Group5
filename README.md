@@ -36,3 +36,20 @@
 | **Postman Results - (Screenshot)** | https://drive.google.com/drive/folders/1PABaLAF1RL31i-spejt5GG5fTHUfpGDb?usp=sharing |
 | **Postman Results - (JSON)** | https://drive.google.com/file/d/1mGLYZRUky9KIxONK7jTdf_aGhbwCjUT6/view?usp=sharing |
 | **Postman Environment - (JSON)** | https://drive.google.com/file/d/1wL6OWEfRGHskKjtEOT9pI2YHTMOLrWsb/view?usp=sharing |
+
+
+## Terminal Assessment: Enhancing Security and Scalability
+
+| Document Type | Link / Reference |
+|------------|-------------|
+| **MO-IT152 Enhancing Connectly API A3101 Group 5** | https://docs.google.com/spreadsheets/d/13NHARZNrgj_tkfLhI4DqknmrkVzJcpmjR3dqY41NwCQ/edit?usp=sharing |
+|  |  |
+| **Homework 8:** | **Privacy Settings and Role-Based Access Control (RBAC)** |
+| **Access Control Decision Flow Diagram v2** | https://drive.google.com/file/d/1V6LQjp-R7X9fesJaCUiLPYTxpQ1OOPgF/view?usp=sharing |
+| **Postman Results - (Screenshot)** | https://drive.google.com/drive/folders/1RcHUAXvoI8h6O7-FKAHMldSYdTOoCySK?usp=sharing |
+| **Postman Results - (JSON)** | https://drive.google.com/file/d/1M9D_78oXQyeSbODnQ0nDiUukADKcf5Ym/view?usp=sharing |
+|  |  |
+| **Homework 9:** | **Performance Optimization** |
+| **System Architecture Diagram v6** | https://drive.google.com/file/d/1adj1PphLxYvTAWp7TmGchq9Jx9t9KPw0/view?usp=sharing |
+| **Postman Results - (Screenshot)** | https://drive.google.com/drive/folders/1R-9Guetj_5BZYjtMaJMutRllimNeNlVW?usp=sharing |
+| **Postman Results - (JSON)** | https://drive.google.com/file/d/12DWSt4f4mHCMbErTf0TGgxC32kFYRMit/view?usp=sharing |
