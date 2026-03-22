@@ -10,8 +10,7 @@ class IsPostAuthor(BasePermission):
 
 class IsAdminRole(BasePermission):
     """
-    Permission that only allows admin (staff) users to perform certain actions.
-    Uses Django's built-in is_staff flag instead of a custom role.
+    Permission that only allows admin users to perform certain actions.
     """
     def has_permission(self, request, view):
         return request.user.is_authenticated and getattr(request.user, 'role', '') == 'admin'
