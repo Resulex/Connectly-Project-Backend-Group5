@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',  # Add Django REST Framework
+    'rest_framework',  
     'posts',
     'singletons',
     'django_extensions',
@@ -159,7 +159,7 @@ SOCIALACCOUNT_PROVIDERS = {
         },
         'APP': {
             'client_id': '516073834973-dg6ifcmd3shm4c8u4gc89h3bl5f03b1t.apps.googleusercontent.com',
-            'secret': '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',
+            'secret': '',
             'key': ''
         }
     }
@@ -177,7 +177,7 @@ REST_FRAMEWORK = {
 
     # Pagination settings
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5
+    'DEFAULT_PAGE_SIZE': 5
 }
 
 AUTH_USER_MODEL = 'posts.CustomUser'

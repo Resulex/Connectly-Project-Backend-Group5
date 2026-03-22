@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.pagination import PageNumberPagination
+from django.conf import settings
 
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Prefetch, Q
@@ -23,6 +24,7 @@ from .permissions import IsPostAuthor, IsAdminRole
 
 from singletons.logger_singleton import LoggerSingleton
 from factories.post_factory import PostFactory
+
 
 
 # Get the Django user model
@@ -255,18 +257,25 @@ class GoogleLoginView(APIView):
         try:
             id_token_str = request.data.get('id_token')
             if not id_token_str:
+                logger.warning("No id_token provided in request")
                 return Response({'error': 'id_token is required'}, status=status.HTTP_400_BAD_REQUEST)
 
             # Verify token with Google
-            idinfo = id_token.verify_oauth2_token(
-                id_token_str,
-                requests.Request(),
-                'YOUR_GOOGLE_CLIENT_ID'
-            )
+            try: 
+             GOOGLE_CLIENT_ID = settings.SOCIALACCOUNT_PROVIDERS['google']['APP']['client_id']
+
+             idinfo = id_token.verify_oauth2_token(
+             id_token_str,
+                    requests.Request(),
+                    GOOGLE_CLIENT_ID
+                )
+            except ValueError as e:
+                logger.error(f"Google token verification failed: {str(e)}")
+                return Response({'error': 'Invalid Google token'}, status=status.HTTP_401_UNAUTHORIZED)
 
             email = idinfo.get('email')
-            first_name = idinfo.get('given_name', '')
-            last_name = idinfo.get('family_name', '')
+            first_name = idinfo.get('first_name', '')
+            last_name = idinfo.get('last_name', '')
 
             # Get or create user
             user, created = User.objects.get_or_create(
@@ -318,7 +327,10 @@ class FeedView(APIView):
         cache_key = f"feed:v{feed_version}:user:{request.user.id}:page:{page}:size:{page_size or 'default'}"
         cached = cache.get(cache_key)
         if cached:
+            print(f"\033[92m[CACHE HIT]\033[0m Key: {cache_key}")
             return Response(cached)
+        
+        print(f"\033[91m[CACHE MISS]\033[0m Key: {cache_key}")
 
         posts_qs = (
             Post.objects
